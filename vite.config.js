@@ -4,10 +4,34 @@ import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 import tailwindcss from '@tailwindcss/vite'
+import AutoImport from 'unplugin-auto-import/vite'
+import Components from 'unplugin-vue-components/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue(), vueDevTools(), tailwindcss()],
+  plugins: [
+    vue(),
+    vueDevTools(),
+    tailwindcss(),
+    Components({
+      dirs: ['src/components'],
+      globs: ['src/components/*.vue'],
+      extensions: ['vue'],
+      include: [/\.vue$/, /\.vue\?vue/, /\.vue\.[tj]sx?\?vue/],
+      exclude: [/[\\/]node_modules[\\/]/, /[\\/]\.git[\\/]/, /[\\/]\.nuxt[\\/]/],
+      excludeNames: [/^Async.+/],
+      deep: true,
+    }),
+    AutoImport({
+      include: [
+        /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+        /\.vue$/, // .vue
+        /\.vue\?vue/, // .vue?vue
+        /\.md$/, // .md
+      ],
+      imports: ['vue'],
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

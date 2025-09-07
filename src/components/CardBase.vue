@@ -1,26 +1,22 @@
 <template>
   <div
     class="card p-1 bg-base-100 shadow-sm hover:shadow-lg hover:bg-base-300 transition-shadow duration-300 cursor-pointer"
+    tabindex="0"
+    role="button"
+    @click="cardClick"
   >
-    <div class="avatar-group -space-x-6">
-      <div class="avatar" v-for="(personagem, index) in personagensPrincipais" :key="index">
-        <div class="w-12">
-          <img :src="getImagem(personagem)" />
-        </div>
-      </div>
-      <div v-if="contagemPersonagensSecundarios >= 5" class="avatar avatar-placeholder">
-        <div class="bg-neutral text-neutral-content w-12">
-          <span>+{{ contagemPersonagensSecundarios }}</span>
-        </div>
-      </div>
-    </div>
+    <avatar-group :personagens="props.personagens" />
     <div class="card-body">
       <h2 class="card-title">
         {{ titulo }}
-        <div class="badge badge-secondary">{{ episodio }}</div>
+        <badge-episode>
+          {{ episodio }}
+        </badge-episode>
       </h2>
       <div class="card-actions justify-end">
-        <div class="badge badge-outline">{{ lancamento }}</div>
+        <badge-air-date>
+          {{ lancamento }}
+        </badge-air-date>
       </div>
     </div>
   </div>
@@ -29,24 +25,15 @@
 <script setup>
 const props = defineProps({
   titulo: String,
+  id: Number,
   episodio: String,
   lancamento: String,
   personagens: Array,
 })
 
-const personagensPrincipais = computed(() => {
-  return props.personagens.length > 5 ? [...props.personagens.slice(0, 5)] : props.personagens
-})
+const emit = defineEmits(['card-click'])
 
-const contagemPersonagensSecundarios = computed(() => {
-  return props.personagens.length > 5 ? props.personagens.length - 5 : 0
-})
-
-const getImagem = (url) => {
-  const newUrl = url.replace(
-    'https://rickandmortyapi.com/api/character/',
-    `https://rickandmortyapi.com/api/character/avatar/`,
-  )
-  return `${newUrl}.jpeg`
+function cardClick() {
+  emit('card-click', props.id.toString())
 }
 </script>

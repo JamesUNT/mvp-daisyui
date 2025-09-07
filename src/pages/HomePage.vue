@@ -11,6 +11,7 @@
           :personagens="episodio.characters"
         />
       </div>
+      <pre>{{ episodios }}</pre>
     </div>
   </main>
 </template>

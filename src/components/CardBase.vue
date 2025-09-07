@@ -1,14 +1,16 @@
 <template>
-  <div class="card bg-base-100 shadow-sm">
+  <div
+    class="card p-1 bg-base-100 shadow-sm hover:shadow-lg hover:bg-base-300 transition-shadow duration-300 cursor-pointer"
+  >
     <div class="avatar-group -space-x-6">
       <div class="avatar" v-for="(personagem, index) in personagensPrincipais" :key="index">
         <div class="w-12">
           <img :src="getImagem(personagem)" />
         </div>
       </div>
-      <div v-if="personagens.length > 5" class="avatar avatar-placeholder">
+      <div v-if="contagemPersonagensSecundarios >= 5" class="avatar avatar-placeholder">
         <div class="bg-neutral text-neutral-content w-12">
-          <span>+{{ personagens.length }}</span>
+          <span>+{{ contagemPersonagensSecundarios }}</span>
         </div>
       </div>
     </div>
@@ -17,7 +19,7 @@
         {{ titulo }}
         <div class="badge badge-secondary">{{ episodio }}</div>
       </h2>
-      <div class="card-actions justify-start">
+      <div class="card-actions justify-end">
         <div class="badge badge-outline">{{ lancamento }}</div>
       </div>
     </div>
@@ -34,6 +36,10 @@ const props = defineProps({
 
 const personagensPrincipais = computed(() => {
   return props.personagens.length > 5 ? [...props.personagens.slice(0, 5)] : props.personagens
+})
+
+const contagemPersonagensSecundarios = computed(() => {
+  return props.personagens.length > 5 ? props.personagens.length - 5 : 0
 })
 
 const getImagem = (url) => {
